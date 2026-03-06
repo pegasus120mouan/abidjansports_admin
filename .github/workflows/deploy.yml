@@ -21,12 +21,16 @@ jobs:
 
             git config --global --add safe.directory "${{ secrets.APP_DIR }}"
 
+            # Configure Git credentials for private repo
+            git remote set-url origin https://${{ secrets.GH_TOKEN }}@github.com/pegasus120mouan/abidjansports_admin.git
+
             git fetch --all
             git reset --hard origin/main
 
             composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
 
             php artisan migrate --force
+            php artisan storage:link --force
 
             php artisan config:cache
             php artisan route:cache

@@ -12,7 +12,7 @@
 
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Liste des Articles</h3>
+                <h3 class="card-title">Liste des Articles 1</h3>
                 <div class="card-tools">
                     <a href="{{ route('articles.create') }}" class="btn btn-primary btn-sm">
                         <i class="bi bi-plus-lg"></i> Nouvel Article

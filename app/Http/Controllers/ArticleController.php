@@ -42,7 +42,7 @@ class ArticleController extends Controller
         }
 
         if ($request->hasFile('image')) {
-            $disk = env('FILESYSTEM_DISK', 'public') === 's3' ? 's3' : 'public';
+            $disk = config('filesystems.default', 'public');
             $validated['image'] = $request->file('image')->store('articles', $disk);
         }
 
@@ -75,7 +75,7 @@ class ArticleController extends Controller
         }
 
         if ($request->hasFile('image')) {
-            $disk = env('FILESYSTEM_DISK', 'public') === 's3' ? 's3' : 'public';
+            $disk = config('filesystems.default', 'public');
             $validated['image'] = $request->file('image')->store('articles', $disk);
         }
 

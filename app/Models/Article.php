@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class Article extends Model
@@ -39,6 +40,21 @@ class Article extends Model
     public function category()
     {
         return $this->sousCategory->category ?? null;
+    }
+
+    public function getImageUrlAttribute()
+    {
+        if (!$this->image) {
+            return null;
+        }
+
+        $disk = config('filesystems.default');
+        
+        if ($disk === 's3') {
+            return Storage::disk('s3')->url($this->image);
+        }
+        
+        return asset('storage/' . $this->image);
     }
 
     protected static function boot()

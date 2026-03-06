@@ -57,8 +57,8 @@
                 <label for="image" class="form-label">Image</label>
                 <div class="mb-3">
                     <div id="imagePreviewContainer" class="border rounded p-2 text-center bg-light" style="min-height: 150px;">
-                        @if($article->image)
-                            <img src="{{ asset('storage/' . $article->image) }}" alt="Image actuelle" id="imagePreview" class="img-fluid rounded" style="max-height: 200px;">
+                        @if($article->image_url)
+                            <img src="{{ $article->image_url }}" alt="Image actuelle" id="imagePreview" class="img-fluid rounded" style="max-height: 200px;">
                         @else
                             <div id="imagePlaceholder" class="d-flex flex-column align-items-center justify-content-center h-100 text-muted" style="min-height: 150px;">
                                 <i class="bi bi-image fs-1"></i>

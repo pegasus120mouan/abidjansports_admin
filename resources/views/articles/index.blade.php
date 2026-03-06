@@ -38,8 +38,8 @@
                         <tr>
                             <td>{{ $article->id }}</td>
                             <td>
-                                @if($article->image)
-                                    <img src="{{ asset('storage/' . $article->image) }}" alt="{{ $article->titre }}" class="img-thumbnail" style="max-width: 60px; max-height: 60px;">
+                                @if($article->image_url)
+                                    <img src="{{ $article->image_url }}" alt="{{ $article->titre }}" class="img-thumbnail" style="max-width: 60px; max-height: 60px;">
                                 @else
                                     <span class="text-muted">-</span>
                                 @endif

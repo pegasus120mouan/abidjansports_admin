@@ -42,7 +42,8 @@ class ArticleController extends Controller
         }
 
         if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('articles', 'public');
+            $disk = env('FILESYSTEM_DISK', 'public') === 's3' ? 's3' : 'public';
+            $validated['image'] = $request->file('image')->store('articles', $disk);
         }
 
         Article::create($validated);
@@ -74,7 +75,8 @@ class ArticleController extends Controller
         }
 
         if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('articles', 'public');
+            $disk = env('FILESYSTEM_DISK', 'public') === 's3' ? 's3' : 'public';
+            $validated['image'] = $request->file('image')->store('articles', $disk);
         }
 
         $article->update($validated);

@@ -1,0 +1,29 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\User;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
+
+class DatabaseSeeder extends Seeder
+{
+    use WithoutModelEvents;
+
+    /**
+     * Seed the application's database.
+     */
+    public function run(): void
+    {
+        // User::factory(10)->create();
+
+        User::create([
+            'nom' => 'Admin',
+            'prenoms' => 'Super',
+            'contact' => '0700000000',
+            'role' => 'administrateur',
+            'email' => 'admin@abidjansports.com',
+            'password' => bcrypt('password123'),
+        ]);
+    }
+}

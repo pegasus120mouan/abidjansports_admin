@@ -51,7 +51,8 @@ class Article extends Model
         $disk = config('filesystems.default');
         
         if ($disk === 's3') {
-            return Storage::disk('s3')->url($this->image);
+            $baseUrl = rtrim(config('filesystems.disks.s3.url'), '/');
+            return $baseUrl . '/' . $this->image;
         }
         
         return asset('storage/' . $this->image);

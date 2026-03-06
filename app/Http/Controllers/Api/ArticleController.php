@@ -181,13 +181,11 @@ class ArticleController extends Controller
             return null;
         }
 
-        // Utiliser S3 si configuré
+        // Utiliser S3/MinIO si configuré
         if (config('filesystems.default') === 's3' || config('filesystems.disks.s3.endpoint')) {
-            try {
-                return Storage::disk('s3')->url($path);
-            } catch (\Exception $e) {
-                // Fallback si S3 échoue
-            }
+            $endpoint = rtrim(config('filesystems.disks.s3.endpoint'), '/');
+            $bucket = config('filesystems.disks.s3.bucket');
+            return $endpoint . '/' . $bucket . '/' . $path;
         }
         
         // Fallback pour le stockage local

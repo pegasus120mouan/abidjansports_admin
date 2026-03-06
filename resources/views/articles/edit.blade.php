@@ -55,12 +55,20 @@
         <div class="col-md-6">
             <div class="mb-3">
                 <label for="image" class="form-label">Image</label>
-                @if($article->image)
-                    <div class="mb-2">
-                        <img src="{{ asset('storage/' . $article->image) }}" alt="Image actuelle" class="img-thumbnail" style="max-height: 100px;">
+                <div class="mb-3">
+                    <div id="imagePreviewContainer" class="border rounded p-2 text-center bg-light" style="min-height: 150px;">
+                        @if($article->image)
+                            <img src="{{ asset('storage/' . $article->image) }}" alt="Image actuelle" id="imagePreview" class="img-fluid rounded" style="max-height: 200px;">
+                        @else
+                            <div id="imagePlaceholder" class="d-flex flex-column align-items-center justify-content-center h-100 text-muted" style="min-height: 150px;">
+                                <i class="bi bi-image fs-1"></i>
+                                <span>Aperçu de l'image</span>
+                            </div>
+                            <img src="" alt="Aperçu" id="imagePreview" class="img-fluid rounded d-none" style="max-height: 200px;">
+                        @endif
                     </div>
-                @endif
-                <input type="file" name="image" id="image" class="form-control @error('image') is-invalid @enderror" accept="image/*">
+                </div>
+                <input type="file" name="image" id="image" class="form-control @error('image') is-invalid @enderror" accept="image/*" onchange="previewImage(this)">
                 <small class="text-muted">Laissez vide pour conserver l'image actuelle</small>
                 @error('image')
                     <div class="invalid-feedback">{{ $message }}</div>
@@ -109,6 +117,25 @@
             ]
         });
     });
+
+    function previewImage(input) {
+        const preview = document.getElementById('imagePreview');
+        const placeholder = document.getElementById('imagePlaceholder');
+        
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.classList.remove('d-none');
+                if (placeholder) {
+                    placeholder.classList.add('d-none');
+                }
+            }
+            
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
 </script>
 @endpush
 @endsection

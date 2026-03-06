@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Article;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ArticleController extends Controller
 {
@@ -38,7 +39,7 @@ class ArticleController extends Controller
                     'slug' => $article->slug,
                     'resume' => $article->resume,
                     'contenu' => $article->contenu,
-                    'image' => $article->image ? asset('storage/' . $article->image) : null,
+                    'image' => $article->image ? $this->getImageUrl($article->image) : null,
                     'statut' => $article->statut,
                     'date_publication' => $article->date_publication,
                     'created_at' => $article->created_at,
@@ -82,7 +83,7 @@ class ArticleController extends Controller
                 'slug' => $article->slug,
                 'resume' => $article->resume,
                 'contenu' => $article->contenu,
-                'image' => $article->image ? asset('storage/' . $article->image) : null,
+                'image' => $article->image ? $this->getImageUrl($article->image) : null,
                 'statut' => $article->statut,
                 'date_publication' => $article->date_publication,
                 'created_at' => $article->created_at,
@@ -122,7 +123,7 @@ class ArticleController extends Controller
                     'titre' => $article->titre,
                     'slug' => $article->slug,
                     'resume' => $article->resume,
-                    'image' => $article->image ? asset('storage/' . $article->image) : null,
+                    'image' => $article->image ? $this->getImageUrl($article->image) : null,
                     'created_at' => $article->created_at,
                     'category' => [
                         'nom' => $article->sousCategory->category->nom,
@@ -150,7 +151,7 @@ class ArticleController extends Controller
                     'titre' => $article->titre,
                     'slug' => $article->slug,
                     'resume' => $article->resume,
-                    'image' => $article->image ? asset('storage/' . $article->image) : null,
+                    'image' => $article->image ? $this->getImageUrl($article->image) : null,
                     'created_at' => $article->created_at,
                     'sous_category' => [
                         'nom' => $article->sousCategory->nom,
@@ -169,5 +170,27 @@ class ArticleController extends Controller
                 'total' => $articles->total(),
             ]
         ]);
+    }
+
+    /**
+     * Génère l'URL correcte pour une image stockée sur S3/MinIO
+     */
+    private function getImageUrl($path)
+    {
+        if (empty($path)) {
+            return null;
+        }
+
+        // Utiliser S3 si configuré
+        if (config('filesystems.default') === 's3' || config('filesystems.disks.s3.endpoint')) {
+            try {
+                return Storage::disk('s3')->url($path);
+            } catch (\Exception $e) {
+                // Fallback si S3 échoue
+            }
+        }
+        
+        // Fallback pour le stockage local
+        return asset('storage/' . $path);
     }
 }

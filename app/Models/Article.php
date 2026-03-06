@@ -51,8 +51,9 @@ class Article extends Model
         $disk = config('filesystems.default');
         
         if ($disk === 's3') {
-            $baseUrl = rtrim(config('filesystems.disks.s3.url'), '/');
-            return $baseUrl . '/' . $this->image;
+            $endpoint = rtrim(config('filesystems.disks.s3.endpoint'), '/');
+            $bucket = config('filesystems.disks.s3.bucket');
+            return $endpoint . '/' . $bucket . '/' . $this->image;
         }
         
         return asset('storage/' . $this->image);

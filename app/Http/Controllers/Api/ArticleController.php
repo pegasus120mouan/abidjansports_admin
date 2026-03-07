@@ -185,7 +185,14 @@ class ArticleController extends Controller
         if (config('filesystems.default') === 's3' || config('filesystems.disks.s3.endpoint')) {
             $endpoint = rtrim(config('filesystems.disks.s3.endpoint'), '/');
             $bucket = config('filesystems.disks.s3.bucket');
-            return $endpoint . '/' . $bucket . '/' . $path;
+            $url = $endpoint . '/' . $bucket . '/' . $path;
+            
+            // Forcer HTTPS si le site est en HTTPS (éviter contenu mixte)
+            if (request()->secure() || config('app.env') === 'production') {
+                $url = str_replace('http://', 'https://', $url);
+            }
+            
+            return $url;
         }
         
         // Fallback pour le stockage local

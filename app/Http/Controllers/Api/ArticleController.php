@@ -181,18 +181,16 @@ class ArticleController extends Controller
             return null;
         }
 
-        // Utiliser S3/MinIO si configuré
+        // Utiliser le proxy Laravel HTTPS pour les images en production
+        if (config('app.env') === 'production') {
+            return 'https://abidjansports.online/images/' . $path;
+        }
+
+        // Utiliser S3/MinIO si configuré (dev/local)
         if (config('filesystems.default') === 's3' || config('filesystems.disks.s3.endpoint')) {
             $endpoint = rtrim(config('filesystems.disks.s3.endpoint'), '/');
             $bucket = config('filesystems.disks.s3.bucket');
-            $url = $endpoint . '/' . $bucket . '/' . $path;
-            
-            // Forcer HTTPS si le site est en HTTPS (éviter contenu mixte)
-            if (request()->secure() || config('app.env') === 'production') {
-                $url = str_replace('http://', 'https://', $url);
-            }
-            
-            return $url;
+            return $endpoint . '/' . $bucket . '/' . $path;
         }
         
         // Fallback pour le stockage local

@@ -138,6 +138,8 @@ class ArticleController extends Controller
 
     public function byCategory($slug)
     {
+        $category = \App\Models\Category::where('slug', $slug)->first();
+        
         $articles = Article::with(['sousCategory.category', 'user'])
             ->whereHas('sousCategory.category', function ($q) use ($slug) {
                 $q->where('slug', $slug);
@@ -147,6 +149,62 @@ class ArticleController extends Controller
             ->paginate(10);
 
         return response()->json([
+            'category' => $category ? [
+                'id' => $category->id,
+                'nom' => $category->nom,
+                'slug' => $category->slug,
+            ] : null,
+            'data' => $articles->map(function ($article) {
+                return [
+                    'id' => $article->id,
+                    'titre' => $article->titre,
+                    'slug' => $article->slug,
+                    'resume' => $article->resume,
+                    'image' => $article->image ? $this->getImageUrl($article->image) : null,
+                    'created_at' => $article->created_at,
+                    'sous_category' => [
+                        'nom' => $article->sousCategory->nom,
+                        'slug' => $article->sousCategory->slug,
+                    ],
+                    'auteur' => [
+                        'nom' => $article->user->nom,
+                        'prenoms' => $article->user->prenoms,
+                        'signature' => $article->user->signature,
+                    ],
+                ];
+            }),
+            'meta' => [
+                'current_page' => $articles->currentPage(),
+                'last_page' => $articles->lastPage(),
+                'per_page' => $articles->perPage(),
+                'total' => $articles->total(),
+            ]
+        ]);
+    }
+
+    public function bySousCategory($slug)
+    {
+        $sousCategory = \App\Models\SousCategory::with('category')->where('slug', $slug)->first();
+        
+        $articles = Article::with(['sousCategory.category', 'user'])
+            ->whereHas('sousCategory', function ($q) use ($slug) {
+                $q->where('slug', $slug);
+            })
+            ->where('statut', 'publie')
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        return response()->json([
+            'sous_category' => $sousCategory ? [
+                'id' => $sousCategory->id,
+                'nom' => $sousCategory->nom,
+                'slug' => $sousCategory->slug,
+                'category' => [
+                    'id' => $sousCategory->category->id,
+                    'nom' => $sousCategory->category->nom,
+                    'slug' => $sousCategory->category->slug,
+                ],
+            ] : null,
             'data' => $articles->map(function ($article) {
                 return [
                     'id' => $article->id,

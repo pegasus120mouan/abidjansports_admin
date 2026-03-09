@@ -59,16 +59,15 @@
                                 @endif
                             </td>
                             <td>
-                                <a href="{{ route('articles.edit', $article) }}" class="btn btn-warning btn-sm">
+                                <a href="{{ route('articles.preview', $article) }}" class="btn btn-info btn-sm" title="Prévisualiser">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a href="{{ route('articles.edit', $article) }}" class="btn btn-warning btn-sm" title="Modifier">
                                     <i class="bi bi-pencil"></i>
                                 </a>
-                                <form action="{{ route('articles.destroy', $article) }}" method="POST" class="d-inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet article ?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </form>
+                                <button type="button" class="btn btn-danger btn-sm" title="Supprimer" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $article->id }}">
+                                    <i class="bi bi-trash"></i>
+                                </button>
                             </td>
                         </tr>
                         @empty
@@ -85,4 +84,45 @@
         </div>
     </div>
 </div>
+
+<!-- Modals de suppression -->
+@foreach($articles as $article)
+<div class="modal fade" id="deleteModal{{ $article->id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ $article->id }}" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0 pb-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+            </div>
+            <div class="modal-body text-center px-4 pb-4">
+                <div class="mb-4">
+                    <div class="rounded-circle bg-danger bg-opacity-10 d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                        <i class="bi bi-trash text-danger" style="font-size: 2.5rem;"></i>
+                    </div>
+                </div>
+                <h4 class="mb-3">Supprimer cet article ?</h4>
+                <p class="text-muted mb-2">
+                    Vous êtes sur le point de supprimer l'article :
+                </p>
+                <p class="fw-bold mb-4">"{{ Str::limit($article->titre, 60) }}"</p>
+                <p class="text-danger small mb-4">
+                    <i class="bi bi-exclamation-triangle me-1"></i>
+                    Cette action est irréversible.
+                </p>
+                <div class="d-flex gap-2 justify-content-center">
+                    <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">
+                        <i class="bi bi-x-lg me-1"></i> Annuler
+                    </button>
+                    <form action="{{ route('articles.destroy', $article) }}" method="POST" class="d-inline">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger px-4">
+                            <i class="bi bi-trash me-1"></i> Oui, supprimer
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endforeach
 @endsection

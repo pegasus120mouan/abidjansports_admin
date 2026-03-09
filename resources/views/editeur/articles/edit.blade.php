@@ -87,8 +87,11 @@
         </div>
         <div class="card-footer">
             <a href="{{ route('editeur.articles.index') }}" class="btn btn-secondary">Annuler</a>
-            <button type="submit" class="btn btn-primary">
+            <button type="submit" name="action" value="save" class="btn btn-primary">
                 <i class="bi bi-check-lg"></i> Enregistrer
+            </button>
+            <button type="submit" name="action" value="preview" class="btn btn-info">
+                <i class="bi bi-eye"></i> Prévisualiser
             </button>
         </div>
     </form>

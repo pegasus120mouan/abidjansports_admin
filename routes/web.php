@@ -21,6 +21,8 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware(['auth', 'role:administrateur'])->group(function () {
     Route::resource('articles', ArticleController::class)->except(['show']);
+    Route::get('articles/{article}/preview', [ArticleController::class, 'preview'])->name('articles.preview');
+    Route::patch('articles/{article}/publish', [ArticleController::class, 'publish'])->name('articles.publish');
     Route::resource('users', UserController::class);
     Route::patch('users/{user}/update-name', [UserController::class, 'updateName'])->name('users.update-name');
     Route::patch('users/{user}/update-contact', [UserController::class, 'updateContact'])->name('users.update-contact');
@@ -36,6 +38,8 @@ Route::middleware(['auth', 'role:editeur'])->prefix('editeur')->name('editeur.')
     Route::get('/', [EditeurDashboardController::class, 'index'])->name('dashboard');
     
     Route::resource('articles', EditeurArticleController::class)->except(['show']);
+    Route::get('articles/{article}/preview', [EditeurArticleController::class, 'preview'])->name('articles.preview');
+    Route::patch('articles/{article}/publish', [EditeurArticleController::class, 'publish'])->name('articles.publish');
     
     Route::get('categories', [EditeurCategoryController::class, 'index'])->name('categories.index');
     Route::post('categories', [EditeurCategoryController::class, 'store'])->name('categories.store');

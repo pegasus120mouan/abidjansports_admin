@@ -41,6 +41,11 @@ class ArticleController extends Controller
         $validated['slug'] = Str::slug($validated['titre']);
         $validated['user_id'] = Auth::id();
 
+        // Si prévisualisation, forcer le statut brouillon
+        if ($request->input('action') === 'preview') {
+            $validated['statut'] = 'brouillon';
+        }
+
         if ($validated['statut'] === 'publie') {
             $validated['date_publication'] = now();
         }
@@ -50,7 +55,12 @@ class ArticleController extends Controller
             $validated['image'] = $request->file('image')->store('articles', $disk);
         }
 
-        Article::create($validated);
+        $article = Article::create($validated);
+
+        // Rediriger vers la prévisualisation si demandé
+        if ($request->input('action') === 'preview') {
+            return redirect()->route('editeur.articles.preview', $article);
+        }
 
         return redirect()->route('editeur.articles.index')->with('success', 'Article créé avec succès.');
     }
@@ -82,6 +92,11 @@ class ArticleController extends Controller
 
         $validated['slug'] = Str::slug($validated['titre']);
 
+        // Si prévisualisation, forcer le statut brouillon
+        if ($request->input('action') === 'preview') {
+            $validated['statut'] = 'brouillon';
+        }
+
         if ($validated['statut'] === 'publie' && $article->statut !== 'publie') {
             $validated['date_publication'] = now();
         }
@@ -92,6 +107,11 @@ class ArticleController extends Controller
         }
 
         $article->update($validated);
+
+        // Rediriger vers la prévisualisation si demandé
+        if ($request->input('action') === 'preview') {
+            return redirect()->route('editeur.articles.preview', $article);
+        }
 
         return redirect()->route('editeur.articles.index')->with('success', 'Article modifié avec succès.');
     }
@@ -104,5 +124,29 @@ class ArticleController extends Controller
         
         $article->delete();
         return redirect()->route('editeur.articles.index')->with('success', 'Article supprimé avec succès.');
+    }
+
+    public function preview(Article $article)
+    {
+        if ($article->user_id !== Auth::id()) {
+            abort(403, 'Vous ne pouvez prévisualiser que vos propres articles.');
+        }
+        
+        $article->load(['sousCategory.category', 'user']);
+        return view('editeur.articles.preview', compact('article'));
+    }
+
+    public function publish(Article $article)
+    {
+        if ($article->user_id !== Auth::id()) {
+            abort(403, 'Vous ne pouvez publier que vos propres articles.');
+        }
+        
+        $article->update([
+            'statut' => 'publie',
+            'date_publication' => now(),
+        ]);
+
+        return redirect()->route('editeur.articles.index')->with('success', 'Article publié avec succès.');
     }
 }

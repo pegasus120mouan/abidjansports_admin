@@ -18,6 +18,7 @@ Route::get('/articles', [ArticleController::class, 'index']);
 Route::get('/articles/latest', [ArticleController::class, 'latest']);
 Route::get('/articles/{slug}', [ArticleController::class, 'show']);
 Route::get('/articles/category/{slug}', [ArticleController::class, 'byCategory']);
+Route::get('/articles/sous-category/{slug}', [ArticleController::class, 'bySousCategory']);
 
 // Catégories
 Route::get('/categories', [CategoryController::class, 'index']);

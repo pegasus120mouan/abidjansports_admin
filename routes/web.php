@@ -7,6 +7,7 @@ use App\Http\Controllers\FlashInformationController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\SousCategoryController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\JournalController;
 use App\Http\Controllers\Editeur\DashboardController as EditeurDashboardController;
 use App\Http\Controllers\Editeur\ArticleController as EditeurArticleController;
 use App\Http\Controllers\Editeur\CategoryController as EditeurCategoryController;
@@ -32,6 +33,7 @@ Route::middleware(['auth', 'role:administrateur'])->group(function () {
     Route::resource('sous-categories', SousCategoryController::class)->except(['show', 'create']);
     Route::resource('flash-informations', FlashInformationController::class)->except(['show']);
     Route::patch('flash-informations/{flashInformation}/toggle', [FlashInformationController::class, 'toggleStatus'])->name('flash-informations.toggle');
+    Route::resource('journals', JournalController::class);
 });
 
 Route::middleware(['auth', 'role:editeur'])->prefix('editeur')->name('editeur.')->group(function () {

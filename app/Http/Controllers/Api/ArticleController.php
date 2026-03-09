@@ -57,6 +57,7 @@ class ArticleController extends Controller
                         'id' => $article->user->id,
                         'nom' => $article->user->nom,
                         'prenoms' => $article->user->prenoms,
+                        'signature' => $article->user->signature,
                     ],
                 ];
             }),
@@ -101,6 +102,7 @@ class ArticleController extends Controller
                     'id' => $article->user->id,
                     'nom' => $article->user->nom,
                     'prenoms' => $article->user->prenoms,
+                    'signature' => $article->user->signature,
                 ],
             ]
         ]);
@@ -160,6 +162,7 @@ class ArticleController extends Controller
                     'auteur' => [
                         'nom' => $article->user->nom,
                         'prenoms' => $article->user->prenoms,
+                        'signature' => $article->user->signature,
                     ],
                 ];
             }),

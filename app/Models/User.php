@@ -23,9 +23,27 @@ class User extends Authenticatable
         'prenoms',
         'contact',
         'role',
+        'avatar',
+        'signature',
+        'statut',
         'email',
         'password',
     ];
+
+    public function getAvatarUrlAttribute()
+    {
+        if ($this->avatar) {
+            return asset('assets/img/avatars/' . $this->avatar);
+        }
+        
+        $initials = strtoupper(substr($this->prenoms, 0, 1) . substr($this->nom, 0, 1));
+        return 'https://ui-avatars.com/api/?name=' . urlencode($initials) . '&background=3949ab&color=fff&size=100';
+    }
+
+    public function getDisplayNameAttribute()
+    {
+        return $this->signature ?: $this->prenoms . ' ' . $this->nom;
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -47,6 +65,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'statut' => 'boolean',
         ];
     }
 }

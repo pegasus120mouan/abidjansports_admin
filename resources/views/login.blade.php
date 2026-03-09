@@ -186,6 +186,21 @@
             color: #9e9e9e;
         }
         
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #3949ab;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .toggle-password:hover {
+            color: #ffc107;
+        }
+        
         .options-row {
             display: flex;
             justify-content: space-between;
@@ -297,7 +312,8 @@
                 
                 <div class="input-group">
                     <i class="bi bi-lock-fill icon"></i>
-                    <input type="password" name="password" placeholder="Mot de passe" required />
+                    <input type="password" name="password" id="password" placeholder="Mot de passe" required />
+                    <i class="bi bi-eye-slash toggle-password" id="togglePassword"></i>
                 </div>
                 
                 <div class="options-row">
@@ -312,5 +328,22 @@
             </form>
         </div>
     </div>
+    
+    <script>
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const password = document.getElementById('password');
+            const icon = this;
+            
+            if (password.type === 'password') {
+                password.type = 'text';
+                icon.classList.remove('bi-eye-slash');
+                icon.classList.add('bi-eye');
+            } else {
+                password.type = 'password';
+                icon.classList.remove('bi-eye');
+                icon.classList.add('bi-eye-slash');
+            }
+        });
+    </script>
 </body>
 </html>

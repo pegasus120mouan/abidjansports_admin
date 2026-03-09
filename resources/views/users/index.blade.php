@@ -24,12 +24,12 @@
                     <thead>
                         <tr>
                             <th style="width: 10px">#</th>
+                            <th style="width: 60px">Avatar</th>
                             <th>Nom</th>
-                            <th>Prénoms</th>
+                            <th>Signature</th>
                             <th>Email</th>
-                            <th>Contact</th>
                             <th>Rôle</th>
-                            <th>Date de création</th>
+                            <th>Statut</th>
                             <th style="width: 150px">Actions</th>
                         </tr>
                     </thead>
@@ -37,10 +37,14 @@
                         @forelse($users as $user)
                         <tr>
                             <td>{{ $user->id }}</td>
-                            <td>{{ $user->nom }}</td>
-                            <td>{{ $user->prenoms }}</td>
+                            <td>
+                                <a href="{{ route('users.show', $user) }}">
+                                    <img src="{{ $user->avatar_url }}" alt="Avatar" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover; cursor: pointer;" title="Voir le profil">
+                                </a>
+                            </td>
+                            <td>{{ $user->nom }} {{ $user->prenoms }}</td>
+                            <td>{{ $user->signature ?? '-' }}</td>
                             <td>{{ $user->email }}</td>
-                            <td>{{ $user->contact ?? '-' }}</td>
                             <td>
                                 @if($user->role == 'administrateur')
                                     <span class="badge text-bg-danger">Administrateur</span>
@@ -50,7 +54,13 @@
                                     <span class="badge text-bg-info">Analyste</span>
                                 @endif
                             </td>
-                            <td>{{ $user->created_at->format('d/m/Y H:i') }}</td>
+                            <td>
+                                @if($user->statut)
+                                    <span class="badge text-bg-success">Actif</span>
+                                @else
+                                    <span class="badge text-bg-secondary">Inactif</span>
+                                @endif
+                            </td>
                             <td>
                                 <a href="{{ route('users.edit', $user) }}" class="btn btn-warning btn-sm">
                                     <i class="bi bi-pencil"></i>
@@ -147,6 +157,14 @@
                             </div>
                         </div>
                         <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="signature" class="form-label">Signature</label>
+                                <input type="text" name="signature" id="signature" class="form-control @error('signature') is-invalid @enderror" value="{{ old('signature') }}" placeholder="Ex: Sacré Ange">
+                                <small class="text-muted">Nom affiché sur les articles</small>
+                                @error('signature')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
                         </div>
                     </div>
 

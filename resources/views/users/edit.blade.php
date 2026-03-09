@@ -7,10 +7,23 @@
             <div class="card-header">
                 <h3 class="card-title">Modifier l'Utilisateur</h3>
             </div>
-            <form action="{{ route('users.update', $user) }}" method="POST">
+            <form action="{{ route('users.update', $user) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-12 text-center">
+                            <img src="{{ $user->avatar_url }}" alt="Avatar" class="rounded-circle mb-3" style="width: 100px; height: 100px; object-fit: cover;">
+                            <div class="mb-3">
+                                <label for="avatar" class="form-label">Changer l'avatar</label>
+                                <input type="file" name="avatar" id="avatar" class="form-control @error('avatar') is-invalid @enderror" accept="image/*">
+                                <small class="text-muted">Laissez vide pour conserver l'avatar actuel</small>
+                                @error('avatar')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">

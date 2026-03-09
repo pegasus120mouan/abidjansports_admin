@@ -22,6 +22,10 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware(['auth', 'role:administrateur'])->group(function () {
     Route::resource('articles', ArticleController::class)->except(['show']);
     Route::resource('users', UserController::class);
+    Route::patch('users/{user}/update-name', [UserController::class, 'updateName'])->name('users.update-name');
+    Route::patch('users/{user}/update-contact', [UserController::class, 'updateContact'])->name('users.update-contact');
+    Route::patch('users/{user}/update-password', [UserController::class, 'updatePassword'])->name('users.update-password');
+    Route::patch('users/{user}/update-avatar', [UserController::class, 'updateAvatar'])->name('users.update-avatar');
     Route::resource('categories', CategoryController::class)->except(['show', 'create']);
     Route::resource('sous-categories', SousCategoryController::class)->except(['show', 'create']);
     Route::resource('flash-informations', FlashInformationController::class)->except(['show']);

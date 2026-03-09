@@ -49,7 +49,7 @@
                                 <span class="badge text-bg-primary">{{ $article->sousCategory->category->nom ?? '-' }}</span>
                                 <span class="badge text-bg-secondary">{{ $article->sousCategory->nom }}</span>
                             </td>
-                            <td>{{ $article->user->prenoms }} {{ $article->user->nom }}</td>
+                            <td>{{ $article->user->display_name }}</td>
                             <td>{{ $article->created_at->format('d/m/Y') }}</td>
                             <td>
                                 @if($article->statut === 'publie')

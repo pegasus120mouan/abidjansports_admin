@@ -23,9 +23,16 @@ class AuthController extends Controller
         $loginField = filter_var($credentials['login'], FILTER_VALIDATE_EMAIL) ? 'email' : 'nom';
 
         if (Auth::attempt([$loginField => $credentials['login'], 'password' => $credentials['password']], $request->boolean('remember'))) {
-            $request->session()->regenerate();
-
             $user = Auth::user();
+            
+            if (!$user->statut) {
+                Auth::logout();
+                return back()->withErrors([
+                    'login' => 'Votre compte est inactif. Veuillez contacter l\'administrateur.',
+                ])->onlyInput('login');
+            }
+            
+            $request->session()->regenerate();
             
             if ($user->role === 'editeur') {
                 return redirect()->route('editeur.dashboard');

@@ -25,6 +25,12 @@ class AuthController extends Controller
         if (Auth::attempt([$loginField => $credentials['login'], 'password' => $credentials['password']], $request->boolean('remember'))) {
             $request->session()->regenerate();
 
+            $user = Auth::user();
+            
+            if ($user->role === 'editeur') {
+                return redirect()->route('editeur.dashboard');
+            }
+            
             return redirect()->intended('/articles');
         }
 

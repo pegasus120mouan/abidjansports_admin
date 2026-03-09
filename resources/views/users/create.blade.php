@@ -53,6 +53,23 @@
                     </div>
 
                     <div class="row">
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label for="role" class="form-label">Rôle <span class="text-danger">*</span></label>
+                                <select name="role" id="role" class="form-select @error('role') is-invalid @enderror" required>
+                                    <option value="">-- Sélectionner --</option>
+                                    <option value="editeur" {{ old('role') == 'editeur' ? 'selected' : '' }}>Éditeur</option>
+                                    <option value="administrateur" {{ old('role') == 'administrateur' ? 'selected' : '' }}>Administrateur</option>
+                                    <option value="analyste" {{ old('role') == 'analyste' ? 'selected' : '' }}>Analyste</option>
+                                </select>
+                                @error('role')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="password" class="form-label">Mot de passe <span class="text-danger">*</span></label>

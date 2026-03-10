@@ -8,6 +8,7 @@ use App\Http\Controllers\ImageController;
 use App\Http\Controllers\SousCategoryController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\JournalController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Editeur\DashboardController as EditeurDashboardController;
 use App\Http\Controllers\Editeur\ArticleController as EditeurArticleController;
 use App\Http\Controllers\Editeur\CategoryController as EditeurCategoryController;
@@ -21,6 +22,7 @@ Route::post('/', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware(['auth', 'role:administrateur'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('articles', ArticleController::class)->except(['show']);
     Route::get('articles/{article}/preview', [ArticleController::class, 'preview'])->name('articles.preview');
     Route::patch('articles/{article}/publish', [ArticleController::class, 'publish'])->name('articles.publish');

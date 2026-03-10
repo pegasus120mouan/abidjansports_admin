@@ -39,8 +39,8 @@
                         <tr>
                             <td>{{ $journal->id }}</td>
                             <td>
-                                @if($journal->image)
-                                    <img src="{{ asset('storage/' . $journal->image) }}" alt="{{ $journal->titre }}" class="img-thumbnail" style="max-width: 60px; max-height: 80px;">
+                                @if($journal->image_url)
+                                    <img src="{{ $journal->image_url }}" alt="{{ $journal->titre }}" class="img-thumbnail" style="max-width: 60px; max-height: 80px;">
                                 @else
                                     <span class="text-muted">-</span>
                                 @endif
@@ -68,8 +68,8 @@
                                 @endif
                             </td>
                             <td>
-                                @if($journal->fichier_pdf)
-                                    <a href="{{ asset('storage/' . $journal->fichier_pdf) }}" class="btn btn-info btn-sm" title="Télécharger PDF" target="_blank">
+                                @if($journal->pdf_url)
+                                    <a href="{{ $journal->pdf_url }}" class="btn btn-info btn-sm" title="Télécharger PDF" target="_blank">
                                         <i class="bi bi-file-pdf"></i>
                                     </a>
                                 @endif

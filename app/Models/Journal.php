@@ -37,6 +37,36 @@ class Journal extends Model
         });
     }
 
+    public function getImageUrlAttribute()
+    {
+        if (!$this->image) {
+            return null;
+        }
+
+        $disk = config('filesystems.default');
+        
+        if ($disk === 's3') {
+            return route('storage.proxy', ['path' => $this->image]);
+        }
+        
+        return asset('storage/' . $this->image);
+    }
+
+    public function getPdfUrlAttribute()
+    {
+        if (!$this->fichier_pdf) {
+            return null;
+        }
+
+        $disk = config('filesystems.default');
+        
+        if ($disk === 's3') {
+            return route('storage.proxy', ['path' => $this->fichier_pdf]);
+        }
+        
+        return asset('storage/' . $this->fichier_pdf);
+    }
+
     public function scopeDisponible($query)
     {
         return $query->where('statut', 'disponible');

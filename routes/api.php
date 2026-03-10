@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\ArticleController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\FlashInformationController;
 use App\Http\Controllers\Api\JournalController;
+use App\Http\Controllers\Api\VisiteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +33,9 @@ Route::get('/flash-informations', [FlashInformationController::class, 'index']);
 Route::get('/journals', [JournalController::class, 'index']);
 Route::get('/journals/latest', [JournalController::class, 'latest']);
 Route::get('/journals/{slug}', [JournalController::class, 'show']);
+
+// Visites (tracking)
+Route::post('/visite', [VisiteController::class, 'enregistrer']);
 
 // Authentification
 Route::post('/login', [AuthController::class, 'login']);

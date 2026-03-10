@@ -93,9 +93,9 @@
                         <div class="col-md-4">
                             <div class="mb-3">
                                 <label for="image" class="form-label">Image de Couverture</label>
-                                @if($journal->image)
+                                @if($journal->image_url)
                                     <div class="mb-2">
-                                        <img src="{{ asset('storage/' . $journal->image) }}" alt="{{ $journal->titre }}" class="img-thumbnail" style="max-width: 200px;">
+                                        <img src="{{ $journal->image_url }}" alt="{{ $journal->titre }}" class="img-thumbnail" style="max-width: 200px;">
                                         <p class="small text-muted mt-1">Image actuelle</p>
                                     </div>
                                 @endif
@@ -109,9 +109,9 @@
 
                             <div class="mb-3">
                                 <label for="fichier_pdf" class="form-label">Fichier PDF</label>
-                                @if($journal->fichier_pdf)
+                                @if($journal->pdf_url)
                                     <div class="mb-2">
-                                        <a href="{{ asset('storage/' . $journal->fichier_pdf) }}" target="_blank" class="btn btn-outline-primary btn-sm">
+                                        <a href="{{ $journal->pdf_url }}" target="_blank" class="btn btn-outline-primary btn-sm">
                                             <i class="bi bi-file-pdf me-1"></i> Voir le PDF actuel
                                         </a>
                                     </div>

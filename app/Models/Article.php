@@ -21,6 +21,7 @@ class Article extends Model
         'user_id',
         'statut',
         'date_publication',
+        'vues',
     ];
 
     protected $casts = [

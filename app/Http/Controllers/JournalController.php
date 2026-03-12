@@ -36,12 +36,14 @@ class JournalController extends Controller
 
         $validated['slug'] = Str::slug($validated['titre'] . '-' . ($validated['numero'] ?? now()->format('Ymd')));
 
+        $disk = config('filesystems.default');
+        
         if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('journals/images', 'public');
+            $validated['image'] = $request->file('image')->store('journaux', $disk);
         }
 
         if ($request->hasFile('fichier_pdf')) {
-            $validated['fichier_pdf'] = $request->file('fichier_pdf')->store('journals/pdfs', 'public');
+            $validated['fichier_pdf'] = $request->file('fichier_pdf')->store('journaux/pdfs', $disk);
         }
 
         Journal::create($validated);
@@ -73,18 +75,20 @@ class JournalController extends Controller
             'stock' => 'required|integer|min:0',
         ]);
 
+        $disk = config('filesystems.default');
+        
         if ($request->hasFile('image')) {
             if ($journal->image) {
-                Storage::disk('public')->delete($journal->image);
+                Storage::disk($disk)->delete($journal->image);
             }
-            $validated['image'] = $request->file('image')->store('journals/images', 'public');
+            $validated['image'] = $request->file('image')->store('journaux', $disk);
         }
 
         if ($request->hasFile('fichier_pdf')) {
             if ($journal->fichier_pdf) {
-                Storage::disk('public')->delete($journal->fichier_pdf);
+                Storage::disk($disk)->delete($journal->fichier_pdf);
             }
-            $validated['fichier_pdf'] = $request->file('fichier_pdf')->store('journals/pdfs', 'public');
+            $validated['fichier_pdf'] = $request->file('fichier_pdf')->store('journaux/pdfs', $disk);
         }
 
         $journal->update($validated);
@@ -94,11 +98,13 @@ class JournalController extends Controller
 
     public function destroy(Journal $journal)
     {
+        $disk = config('filesystems.default');
+        
         if ($journal->image) {
-            Storage::disk('public')->delete($journal->image);
+            Storage::disk($disk)->delete($journal->image);
         }
         if ($journal->fichier_pdf) {
-            Storage::disk('public')->delete($journal->fichier_pdf);
+            Storage::disk($disk)->delete($journal->fichier_pdf);
         }
 
         $journal->delete();
